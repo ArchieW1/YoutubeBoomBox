@@ -6,7 +6,7 @@ namespace YoutubeBoomBox;
 
 public static class AudioQueue
 {
-    [CanBeNull] public static AudioClip[] DefaultAudios;
+    [CanBeNull] public static AudioClip[] DefaultAudios { get; set; }
     private static List<AudioClip> _clips = [];
     private static int _fp;
     
@@ -23,11 +23,6 @@ public static class AudioQueue
     public static void Add(AudioClip clip)
     {
         _clips.Add(clip);
-    }
-
-    public static void Add(IEnumerable<AudioClip> clips)
-    {
-        _clips.AddRange(clips);
     }
 
     public static AudioClip Get()

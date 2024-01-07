@@ -16,7 +16,7 @@ public class YoutubeService
 
     public async Task<string> DownloadVideoAudioAsync(string searchQuery)
     {
-        Plugin.Logger.LogInfo($"Starting video audio download for query: {searchQuery}");
+        YoutubeBoomBoxPlugin.Logger.LogInfo($"Starting video audio download for query: {searchQuery}");
         
         string jsonString = await _webClient.DownloadStringTaskAsync($"{YoutubeInfo.UriBase}?part=id&q={searchQuery}&key={YoutubeInfo.APIKey}");
         YoutubeApiResponse json = JsonConvert.DeserializeObject<YoutubeApiResponse>(jsonString);
@@ -25,12 +25,12 @@ public class YoutubeService
 
         string name = YoutubeInfo.MusicName;
         string fullPath = $"{YoutubeInfo.FilePath}/{name}";
-        Plugin.Logger.LogInfo($"Downloading to {fullPath}.");
+        YoutubeBoomBoxPlugin.Logger.LogInfo($"Downloading to {fullPath}.");
         await _youtubeClient.Videos.DownloadAsync(videoId, fullPath, o => o
             .SetContainer(Container.Mp3)
             .SetPreset(ConversionPreset.UltraFast)
             .SetFFmpegPath($"{YoutubeInfo.FilePath}/ffmpeg"));
-        Plugin.Logger.LogInfo($"Download complete.");
+        YoutubeBoomBoxPlugin.Logger.LogInfo($"Download complete.");
 
         return name;
     }
@@ -48,21 +48,21 @@ public class YoutubeService
                 try
                 {
                     File.Delete(file);
-                    Plugin.Logger.LogInfo($"Deleted: {file}");
+                    YoutubeBoomBoxPlugin.Logger.LogInfo($"Deleted: {file}");
                 }
                 catch (IOException ioExp)
                 {
-                    Plugin.Logger.LogError($"An IO exception occurred: {ioExp.Message}");
+                    YoutubeBoomBoxPlugin.Logger.LogError($"An IO exception occurred: {ioExp.Message}");
                 }
                 catch (UnauthorizedAccessException unAuthExp)
                 {
-                    Plugin.Logger.LogError($"An Unauthorized Access exception occurred: {unAuthExp.Message}");
+                    YoutubeBoomBoxPlugin.Logger.LogError($"An Unauthorized Access exception occurred: {unAuthExp.Message}");
                 }
             }
         }
         else
         {
-            Plugin.Logger.LogWarning($"The directory {directoryPath} does not exist.");
+            YoutubeBoomBoxPlugin.Logger.LogWarning($"The directory {directoryPath} does not exist.");
         }
     }
 }

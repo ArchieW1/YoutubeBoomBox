@@ -33,11 +33,13 @@ public class AddCommands : MonoBehaviour
     
     private async void AddAudio(string chatMessage, HUDManager instance)
     {
+        
         string name;
         YoutubeService.ClearVideos();
         try
         {
             string query = chatMessage[5..];
+            instance.AddTextToChatOnServer($"Sending search: {query}.");
             name = await _yt.DownloadVideoAudioAsync(query);
         }
         catch (Exception e)

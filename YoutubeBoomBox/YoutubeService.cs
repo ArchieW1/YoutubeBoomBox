@@ -1,28 +1,32 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
-using System.Net;
-using Newtonsoft.Json;
 using YoutubeExplode;
+using YoutubeExplode.Common;
 using YoutubeExplode.Converter;
+using YoutubeExplode.Videos;
 using YoutubeExplode.Videos.Streams;
 
 namespace YoutubeBoomBox;
 
 public class YoutubeService
 {
-    private readonly WebClient _webClient = new();
     private readonly YoutubeClient _youtubeClient = new();
 
     public async Task<string> DownloadVideoAudioAsync(string searchQuery)
     {
         YoutubeBoomBoxPlugin.Logger.LogInfo($"Starting video audio download for query: {searchQuery}");
-        
-        string jsonString = await _webClient.DownloadStringTaskAsync($"{YoutubeInfo.UriBase}?part=id&q={searchQuery}&key={YoutubeInfo.APIKey}");
-        YoutubeApiResponse json = JsonConvert.DeserializeObject<YoutubeApiResponse>(jsonString);
-            
-        string videoId = json.items[0].id.videoId;
 
+        var videos = await _youtubeClient.Search.GetVideosAsync(searchQuery);
+
+        if (!videos.Any())
+        {
+            throw new Exception("No videos found.");
+        }
+
+        VideoId videoId = videos.First().Id;
+        
         string name = YoutubeInfo.MusicName;
         string fullPath = $"{YoutubeInfo.FilePath}/{name}";
         YoutubeBoomBoxPlugin.Logger.LogInfo($"Downloading to {fullPath}.");

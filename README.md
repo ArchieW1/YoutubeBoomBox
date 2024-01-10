@@ -28,3 +28,4 @@ Install like any other BepInEx mod. Install to the following directory:
 - 1.0.0 Released
 - 1.0.1 Fixed folder issue causing an error
 - 1.0.2 Fixed 403 error caused by maxing daily queries
+- 1.0.3 Search is now much faster

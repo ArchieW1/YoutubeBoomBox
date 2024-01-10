@@ -1,4 +1,9 @@
 # Youtube Boombox
+
+[![GitHub Build Status](https://img.shields.io/github/actions/workflow/status/archiew1/youtubeboombox/build.yml?style=for-the-badge&logo=github)](https://github.com/archiew1/youtubeboombox/actions/workflows/build.yml)
+[![Thunderstore Version](https://img.shields.io/thunderstore/v/Archie/YoutubeBoomBox?style=for-the-badge&logo=thunderstore&logoColor=white)](https://thunderstore.io/c/lethal-company/p/Archie/YoutubeBoomBox/)
+[![Thunderstore Downloads](https://img.shields.io/thunderstore/dt/Archie/YoutubeBoomBox?style=for-the-badge&logo=thunderstore&logoColor=white)](https://thunderstore.io/c/lethal-company/p/Archie/YoutubeBoomBox/)
+
 A simple mod that allows players to load audio from youtube audio to the in game boombox.
 
 ## Features

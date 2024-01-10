@@ -39,7 +39,6 @@ public class AddCommands : MonoBehaviour
         try
         {
             string query = chatMessage[5..];
-            instance.AddTextToChatOnServer($"Sending search: {query}.");
             name = await _yt.DownloadVideoAudioAsync(query);
         }
         catch (Exception e)

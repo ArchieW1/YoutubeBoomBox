@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using YoutubeExplode;
 using YoutubeExplode.Common;
 using YoutubeExplode.Converter;
+using YoutubeExplode.Search;
 using YoutubeExplode.Videos;
 using YoutubeExplode.Videos.Streams;
 
@@ -18,14 +19,19 @@ public class YoutubeService
     {
         YoutubeBoomBoxPlugin.Logger.LogInfo($"Starting video audio download for query: {searchQuery}");
 
-        var videos = await _youtubeClient.Search.GetVideosAsync(searchQuery);
-
-        if (!videos.Any())
+        string url = null;
+        await foreach (Batch<ISearchResult> batch in _youtubeClient.Search.GetResultBatchesAsync(searchQuery))
         {
-            throw new Exception("No videos found.");
+            url = batch.Items.First().Url;
+            break;
         }
 
-        VideoId videoId = videos.First().Id;
+        if (url is null)
+        {
+            throw new Exception("No video found");
+        }
+        
+        VideoId videoId = VideoId.Parse(url);
         
         string name = YoutubeInfo.MusicName;
         string fullPath = $"{YoutubeInfo.FilePath}/{name}";

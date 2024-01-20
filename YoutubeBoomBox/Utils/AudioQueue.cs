@@ -2,7 +2,7 @@
 using JetBrains.Annotations;
 using UnityEngine;
 
-namespace YoutubeBoomBox;
+namespace YoutubeBoomBox.Utils;
 
 public static class AudioQueue
 {

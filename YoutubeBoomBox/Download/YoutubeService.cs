@@ -9,7 +9,7 @@ using YoutubeExplode.Search;
 using YoutubeExplode.Videos;
 using YoutubeExplode.Videos.Streams;
 
-namespace YoutubeBoomBox;
+namespace YoutubeBoomBox.Download;
 
 public class YoutubeService
 {

@@ -7,7 +7,7 @@ namespace YoutubeBoomBox.Utils;
 public static class AudioQueue
 {
     [CanBeNull] public static AudioClip[] DefaultAudios { get; set; }
-    private static List<AudioClip> _clips = [];
+    private static List<AudioClip> _clips = new();
     private static int _fp;
     
     public static void Clear()

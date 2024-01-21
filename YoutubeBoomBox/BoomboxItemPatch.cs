@@ -23,7 +23,7 @@ public class BoomboxItemPatch
             }
             else
             {
-                __instance.musicAudios = [AudioQueue.Get()];
+                __instance.musicAudios = new[] {AudioQueue.Get()};
             }
         }
     }

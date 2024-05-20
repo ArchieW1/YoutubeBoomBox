@@ -11,8 +11,9 @@ public class AddCommand : CommandBase
 {
     private readonly YoutubeService _yt = new();
     
-    protected override string Key { get; } = "/add "; 
-    protected override async void Action(string lastChatMessage, HUDManager instance)
+    protected override string Key => "/add ";
+
+    protected override async void Action(string lastChatMessage)
     {
         string name;
         YoutubeService.ClearVideos();
@@ -29,7 +30,7 @@ public class AddCommand : CommandBase
 
         StartCoroutine(LoadAudioCoroutine(name));
 
-        instance.AddTextToChatOnServer($"Player loaded.");
+        HUDManager.Instance.AddTextToChatOnServer($"Player loaded.");
         return;
 
         IEnumerator LoadAudioCoroutine(string query)

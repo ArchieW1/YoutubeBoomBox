@@ -1,13 +1,12 @@
 ﻿using System.Collections.Generic;
-using JetBrains.Annotations;
 using UnityEngine;
 
 namespace YoutubeBoomBox.Utils;
 
 public static class AudioQueue
 {
-    [CanBeNull] public static AudioClip[] DefaultAudios { get; set; }
-    private static List<AudioClip> _clips = new();
+    public static AudioClip[] DefaultAudios { get; set; }
+    private static List<AudioClip> _clips = [];
     private static int _fp;
     
     public static void Clear()

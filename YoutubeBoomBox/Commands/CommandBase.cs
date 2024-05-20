@@ -12,10 +12,10 @@ public abstract class CommandBase : MonoBehaviour
         string lastChatMessage = HUDManager.Instance.lastChatMessage;
         if (lastChatMessage.StartsWith(Key) && _lastMessage != lastChatMessage)
         {
-            Action(lastChatMessage, HUDManager.Instance);
+            Action(lastChatMessage);
             _lastMessage = lastChatMessage;
         }
     }
 
-    protected abstract void Action(string lastChatMessage, HUDManager instance);
+    protected abstract void Action(string lastChatMessage);
 }

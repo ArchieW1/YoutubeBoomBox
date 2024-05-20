@@ -1,4 +1,5 @@
 ﻿using HarmonyLib;
+using YoutubeBoomBox.Commands;
 using YoutubeBoomBox.Utils;
 
 namespace YoutubeBoomBox;
@@ -23,7 +24,7 @@ public class BoomboxItemPatch
             }
             else
             {
-                __instance.musicAudios = new[] {AudioQueue.Get()};
+                __instance.musicAudios = [AudioQueue.Get()];
             }
         }
     }

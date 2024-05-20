@@ -1,6 +1,6 @@
 ﻿using System.IO;
 
-namespace YoutubeBoomBox;
+namespace YoutubeBoomBox.Download;
 
 public static class YoutubeInfo
 {

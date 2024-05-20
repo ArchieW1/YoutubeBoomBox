@@ -2,43 +2,24 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.Networking;
+using YoutubeBoomBox.Download;
+using YoutubeBoomBox.Utils;
 
-namespace YoutubeBoomBox;
+namespace YoutubeBoomBox.Commands;
 
-public class AddCommands : MonoBehaviour
+public class AddCommand : CommandBase
 {
     private readonly YoutubeService _yt = new();
-    private string _lastMessage = string.Empty;
     
-    private void Update()
+    protected override string Key => "/add ";
+
+    protected override async void Action(string lastChatMessage)
     {
-        string lastChatMessage = HUDManager.Instance.lastChatMessage;
-        if (lastChatMessage.StartsWith("/add ") && _lastMessage != lastChatMessage)
-        {
-            AddAudio(lastChatMessage, HUDManager.Instance);
-            _lastMessage = lastChatMessage;
-        }
-        else if (lastChatMessage == "/clear" && _lastMessage != lastChatMessage)
-        {
-            ClearAudio();
-            _lastMessage = lastChatMessage;
-        }
-    }
-    
-    private void ClearAudio()
-    {
-        AudioQueue.Clear();
-        YoutubeService.ClearVideos();
-    }
-    
-    private async void AddAudio(string chatMessage, HUDManager instance)
-    {
-        
         string name;
         YoutubeService.ClearVideos();
         try
         {
-            string query = chatMessage[5..];
+            string query = lastChatMessage[5..];
             name = await _yt.DownloadVideoAudioAsync(query);
         }
         catch (Exception e)
@@ -49,7 +30,7 @@ public class AddCommands : MonoBehaviour
 
         StartCoroutine(LoadAudioCoroutine(name));
 
-        instance.AddTextToChatOnServer($"Player loaded.");
+        HUDManager.Instance.AddTextToChatOnServer($"Player loaded.");
         return;
 
         IEnumerator LoadAudioCoroutine(string query)

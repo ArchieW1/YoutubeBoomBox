@@ -1,4 +1,5 @@
-﻿LethalCompanyMods.sln.DotSettings.user
+﻿*.sln.DotSettings.user
+*.sln
 .idea
 bin
 obj

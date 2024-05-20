@@ -1,4 +1,5 @@
 ﻿using HarmonyLib;
+using YoutubeBoomBox.Commands;
 
 namespace YoutubeBoomBox;
 
@@ -9,6 +10,7 @@ public class HUDManagerPatch
     [HarmonyPatch(nameof(BoomboxItem.Start))]
     public static void AddCommandsToInit(BoomboxItem __instance)
     {
-        __instance.gameObject.AddComponent<AddCommands>();
+        __instance.gameObject.AddComponent<AddCommand>();
+        __instance.gameObject.AddComponent<ClearCommand>();
     }
 }

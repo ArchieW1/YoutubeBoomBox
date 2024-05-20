@@ -20,7 +20,12 @@ public class AddCommand : CommandBase
         try
         {
             string query = lastChatMessage[5..];
-            name = await _yt.DownloadVideoAudioAsync(query);
+            name = await _yt.DownloadVideoAudioAsync(query, YoutubeBoomBoxPlugin.TimeoutLength.Value);
+        }
+        catch (TimeoutException)
+        {
+            HUDManager.Instance.AddTextToChatOnServer($"Download timed out.");
+            return;
         }
         catch (Exception e)
         {
@@ -31,25 +36,24 @@ public class AddCommand : CommandBase
         StartCoroutine(LoadAudioCoroutine(name));
 
         HUDManager.Instance.AddTextToChatOnServer($"Player loaded.");
-        return;
+    }
 
-        IEnumerator LoadAudioCoroutine(string query)
+    private static IEnumerator LoadAudioCoroutine(string query)
+    {
+        string uri = $"file://{YoutubeInfo.FilePath}/{query}";
+        using UnityWebRequest www = UnityWebRequestMultimedia.GetAudioClip(uri, AudioType.MPEG);
+        yield return www.SendWebRequest();
+
+        if (www.result is UnityWebRequest.Result.ConnectionError or UnityWebRequest.Result.ProtocolError)
         {
-            string uri = $"file://{YoutubeInfo.FilePath}/{query}";
-            using UnityWebRequest www = UnityWebRequestMultimedia.GetAudioClip(uri, AudioType.MPEG);
-            yield return www.SendWebRequest();
-
-            if (www.result is UnityWebRequest.Result.ConnectionError or UnityWebRequest.Result.ProtocolError)
-            {
-                YoutubeBoomBoxPlugin.Logger.LogError(www.error);
-            }
-            else
-            {
-                YoutubeBoomBoxPlugin.Logger.LogInfo($"Loading audio clip at: {www.uri}");
-                AudioClip clip = DownloadHandlerAudioClip.GetContent(www);
-                YoutubeBoomBoxPlugin.Logger.LogInfo($"Loaded audio clip.");
-                AudioQueue.Add(clip);
-            }
+            YoutubeBoomBoxPlugin.Logger.LogError(www.error);
+        }
+        else
+        {
+            YoutubeBoomBoxPlugin.Logger.LogInfo($"Loading audio clip at: {www.uri}");
+            AudioClip clip = DownloadHandlerAudioClip.GetContent(www);
+            YoutubeBoomBoxPlugin.Logger.LogInfo($"Loaded audio clip.");
+            AudioQueue.Add(clip);
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using YoutubeExplode;
 using YoutubeExplode.Common;
@@ -15,7 +16,7 @@ public class YoutubeService
 {
     private readonly YoutubeClient _youtubeClient = new();
 
-    public async Task<string> DownloadVideoAudioAsync(string searchQuery)
+    public async Task<string> DownloadVideoAudioAsync(string searchQuery, int maxTime)
     {
         YoutubeBoomBoxPlugin.Logger.LogInfo($"Starting video audio download for query: {searchQuery}");
 
@@ -36,13 +37,42 @@ public class YoutubeService
         string name = YoutubeInfo.MusicName;
         string fullPath = $"{YoutubeInfo.FilePath}/{name}";
         YoutubeBoomBoxPlugin.Logger.LogInfo($"Downloading to {fullPath}.");
-        await _youtubeClient.Videos.DownloadAsync(videoId, fullPath, o => o
-            .SetContainer(Container.Mp3)
-            .SetPreset(ConversionPreset.UltraFast)
-            .SetFFmpegPath($"{YoutubeInfo.FilePath}/ffmpeg"));
-        YoutubeBoomBoxPlugin.Logger.LogInfo($"Download complete.");
+        
+        CancellationTokenSource cts = new();
+        Task downloadTask = DownloadVideoAsync(videoId, fullPath);
+
+        TimeSpan timeout = TimeSpan.FromSeconds(maxTime);
+        Task timeoutTask = Task.Delay(timeout, cts.Token);
+
+        Task completedTask = await Task.WhenAny(downloadTask, timeoutTask);
+
+        if (completedTask == timeoutTask)
+        {
+            cts.Cancel();
+            YoutubeBoomBoxPlugin.Logger.LogError($"Download timed out after {timeout.TotalSeconds} seconds.");
+            throw new TimeoutException("The download operation timed out.");
+        }
+
+        await downloadTask;
 
         return name;
+    }
+    
+    private async Task DownloadVideoAsync(VideoId videoId, string fullPath)
+    {
+        try
+        {
+            await _youtubeClient.Videos.DownloadAsync(videoId, fullPath, o => o
+                .SetContainer(Container.Mp3)
+                .SetPreset(ConversionPreset.UltraFast)
+                .SetFFmpegPath($"{YoutubeInfo.FilePath}/ffmpeg"));
+            YoutubeBoomBoxPlugin.Logger.LogInfo($"Download complete.");
+        }
+        catch (Exception ex)
+        {
+            YoutubeBoomBoxPlugin.Logger.LogError($"An error occurred during download: {ex.Message}");
+            throw;
+        }
     }
 
     public static void ClearVideos()

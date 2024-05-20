@@ -1,5 +1,4 @@
 ﻿*.sln.DotSettings.user
-*.sln
 .idea
 bin
 obj

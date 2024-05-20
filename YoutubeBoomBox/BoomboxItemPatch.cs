@@ -1,5 +1,4 @@
 ﻿using HarmonyLib;
-using YoutubeBoomBox.Commands;
 using YoutubeBoomBox.Utils;
 
 namespace YoutubeBoomBox;

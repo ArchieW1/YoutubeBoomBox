@@ -29,4 +29,6 @@ Install like any other BepInEx mod. Install to the following directory:
 - 1.0.1 Fixed folder issue causing an error
 - 1.0.2 Fixed 403 error caused by maxing daily queries
 - 1.0.3 Search is now much faster
-- 1.0.4 Fixed mod only work on client side
+- 1.0.4 Fixed mod only working on client side
+- 1.0.5 Added volume control command
+- 1.0.6 Added a timeout config for large videos (default 30 seconds)

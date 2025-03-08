@@ -14,7 +14,6 @@
         <PackageReference Include="BepInEx.Core" Version="5.*" />
         <PackageReference Include="BepInEx.PluginInfoProps" Version="2.*" />
         <PackageReference Include="LethalCompany.GameLibs.Steam" Version="45.0.2-alpha.1" />
-        <PackageReference Include="YoutubeExplode.Converter" Version="6.3.10" />
     </ItemGroup>
 
     <ItemGroup Condition="'$(TargetFramework.TrimEnd(`0123456789`))' == 'net'">
